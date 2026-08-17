@@ -1,78 +1,175 @@
-# 🚀 Tasks API
+# 🚀 Task API — FastAPI + PostgreSQL + Docker
 
-A simple and production-style **RESTful CRUD API** built with **Python, FastAPI, and SQLite**.
+A production-oriented **RESTful CRUD API** built with **Python, FastAPI, PostgreSQL, and Docker**.
 
-This project implements a complete task management API with persistent database storage, input validation, proper HTTP status codes, and interactive API documentation using FastAPI's built-in Swagger UI.
+This project provides a complete task management API with persistent PostgreSQL storage, request validation, proper HTTP status codes, automatic database initialization, seed data, interactive API documentation, and containerized development using Docker Compose.
 
-The project was developed as part of the **FlyRank Backend AI Engineering Internship – Week 3 (BE-02)** and demonstrates the complete backend workflow from API design to persistent database operations.
+The project was developed as part of the **FlyRank AI Backend AI Engineering Internship — Week 3 (BE-02)** and demonstrates the transition from a basic CRUD API to a database-backed, containerized backend application.
 
 ---
 
 ## ✨ Features
 
-* ✅ Create a new task
-* ✅ Retrieve all tasks
-* ✅ Retrieve a task by ID
-* ✅ Update an existing task
-* ✅ Delete a task
-* ✅ Persistent data storage using SQLite
-* ✅ Automatic database creation
-* ✅ Automatic table creation
-* ✅ Automatic insertion of sample tasks on first run
-* ✅ Request validation using Pydantic
-* ✅ Proper RESTful API design
-* ✅ Appropriate HTTP status codes
-* ✅ Interactive Swagger UI documentation
-* ✅ ReDoc API documentation
-* ✅ Clean project structure
-* ✅ Database persists data across server restarts
+- ✅ RESTful CRUD API for tasks
+- ✅ Create, read, update, and delete tasks
+- ✅ FastAPI backend
+- ✅ PostgreSQL relational database
+- ✅ Psycopg 3 PostgreSQL driver
+- ✅ Pydantic request validation
+- ✅ Repository pattern for database operations
+- ✅ Automatic database initialization
+- ✅ Automatic `tasks` table creation
+- ✅ Automatic seed data on first startup
+- ✅ Environment-based database configuration
+- ✅ Dockerized FastAPI application
+- ✅ Docker Compose for multi-container orchestration
+- ✅ PostgreSQL persistent named volume
+- ✅ PostgreSQL health check
+- ✅ Interactive Swagger UI documentation
+- ✅ ReDoc API documentation
+- ✅ Proper RESTful HTTP status codes
+- ✅ Clean and modular project structure
+- ✅ Data persistence across container recreation
 
 ---
 
-## 🛠️ Tech Stack
+# 🛠️ Tech Stack
 
-| Technology   | Purpose                                 |
-| ------------ | --------------------------------------- |
-| **Python**   | Backend programming language            |
-| **FastAPI**  | Web framework for building the REST API |
-| **SQLite**   | Persistent relational database          |
-| **Pydantic** | Request validation and data schemas     |
-| **Uvicorn**  | ASGI server                             |
-| **SQL**      | Database queries                        |
+| Technology | Purpose |
+|---|---|
+| **Python 3.12** | Backend programming language |
+| **FastAPI** | REST API framework |
+| **Uvicorn** | ASGI application server |
+| **PostgreSQL 16** | Relational database |
+| **Psycopg 3** | PostgreSQL database driver |
+| **Pydantic** | Request and response validation |
+| **python-dotenv** | Environment variable management |
+| **Docker** | Application containerization |
+| **Docker Compose** | Multi-container orchestration |
+| **Git & GitHub** | Version control |
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```text
-task-api/
+flyrank-be-02-python-crud/
 │
-├── database/
-│   ├── database.py
-│   └── tasks.db
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   │
+│   ├── models/
+│   │   └── task.py
+│   │
+│   ├── repositories/
+│   │   └── postgres_repository.py
+│   │
+│   └── routes/
+│       └── tasks.py
 │
-├── main.py
+├── .env
+├── .gitignore
+├── .dockerignore
+├── Dockerfile
+├── docker-compose.yml
 ├── requirements.txt
-├── README.md
-└── .gitignore
+└── README.md
 ```
 
-### File Description
+## File Description
 
-| File / Directory       | Description                                             |
-| ---------------------- | ------------------------------------------------------- |
-| `main.py`              | Main FastAPI application and API endpoints              |
-| `database/database.py` | SQLite database connection, initialization, and queries |
-| `database/tasks.db`    | SQLite database file containing persistent task data    |
-| `requirements.txt`     | Python project dependencies                             |
-| `.gitignore`           | Files and directories excluded from Git                 |
-| `README.md`            | Project documentation                                   |
+| File / Directory | Description |
+|---|---|
+| `app/main.py` | Creates and configures the FastAPI application |
+| `app/models/task.py` | Defines task-related data models and validation schemas |
+| `app/routes/tasks.py` | Contains task API endpoints |
+| `app/repositories/postgres_repository.py` | Handles PostgreSQL connections, initialization, and CRUD database operations |
+| `.env` | Stores local environment variables and database configuration |
+| `.gitignore` | Specifies files excluded from Git |
+| `.dockerignore` | Specifies files excluded from the Docker build context |
+| `Dockerfile` | Defines the FastAPI application Docker image |
+| `docker-compose.yml` | Defines and orchestrates the FastAPI and PostgreSQL services |
+| `requirements.txt` | Lists Python dependencies |
+| `README.md` | Project documentation |
 
-> **Note:** The exact structure may vary slightly depending on your implementation.
+> ⚠️ **Important:** Never commit `.env` to GitHub because it may contain database credentials.
 
 ---
 
-# ⚙️ Installation
+# 🏗️ Application Architecture
+
+The application consists of two main Docker services:
+
+```text
+                 ┌──────────────────────┐
+                 │       Client         │
+                 │ Browser / Postman    │
+                 │ Swagger / cURL       │
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │      FastAPI App     │
+                 │      Port: 8000      │
+                 └──────────┬───────────┘
+                            │
+                     DATABASE_URL
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │    PostgreSQL 16     │
+                 │      Port: 5432      │
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │   postgres_data      │
+                 │    Docker Volume     │
+                 └──────────────────────┘
+```
+
+Docker Compose creates a shared Docker network so that the FastAPI application can communicate with PostgreSQL using the database service name.
+
+Inside Docker, the application connects to PostgreSQL using:
+
+```text
+postgresql://postgres:postgres@db:5432/taskdb
+```
+
+Here, `db` is the PostgreSQL service name defined in Docker Compose.
+
+---
+
+# ⚙️ Prerequisites
+
+Before running the project, make sure you have installed:
+
+- **Python 3.12+**
+- **Docker Desktop**
+- **Git**
+
+Verify Docker:
+
+```bash
+docker --version
+```
+
+Verify Docker Compose:
+
+```bash
+docker compose version
+```
+
+Verify Python:
+
+```bash
+python --version
+```
+
+---
+
+# 📥 Installation
 
 ## 1. Clone the Repository
 
@@ -80,89 +177,196 @@ task-api/
 git clone https://github.com/Asheer-abbasi01/task-api.git
 ```
 
-## 2. Navigate to the Project Directory
+Navigate into the project:
 
 ```bash
 cd task-api
 ```
 
-## 3. Create a Virtual Environment
-
-It is recommended to use a virtual environment to keep project dependencies isolated.
-
-### Windows
-
-```bash
-python -m venv venv
-```
-
-Activate it:
-
-```bash
-venv\Scripts\activate
-```
-
-### macOS / Linux
-
-```bash
-python3 -m venv venv
-```
-
-Activate it:
-
-```bash
-source venv/bin/activate
-```
+> If your GitHub repository uses a different repository name, replace `task-api` with the actual repository name.
 
 ---
 
-## 4. Install Dependencies
+# 🔐 Environment Configuration
+
+Create a `.env` file in the project root:
+
+```env
+POSTGRES_DB=taskdb
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+DATABASE_URL=postgresql://postgres:postgres@db:5432/taskdb
+```
+
+### Environment Variables
+
+| Variable | Description |
+|---|---|
+| `POSTGRES_DB` | PostgreSQL database name |
+| `POSTGRES_USER` | PostgreSQL username |
+| `POSTGRES_PASSWORD` | PostgreSQL password |
+| `DATABASE_URL` | Connection URL used by FastAPI |
+
+### ⚠️ Security
+
+Do **not** commit `.env` to GitHub.
+
+Your `.gitignore` should include:
+
+```gitignore
+.env
+venv/
+__pycache__/
+*.pyc
+```
+
+For production systems, use secure secrets management instead of storing credentials directly in files.
+
+---
+
+# 📦 Python Dependencies
+
+The project uses the following main dependencies:
+
+```text
+fastapi==0.128.0
+uvicorn[standard]==0.40.0
+pydantic==2.12.5
+psycopg[binary]==3.3.4
+python-dotenv==1.2.1
+```
+
+Install them manually for local development with:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-If you haven't created `requirements.txt` yet:
+---
+
+# 🐳 Running the Application with Docker
+
+Docker Compose is the recommended way to run the complete application because it starts both FastAPI and PostgreSQL.
+
+## 1. Make Sure Docker Desktop Is Running
+
+Start **Docker Desktop** and wait until Docker reports that it is running.
+
+Verify:
 
 ```bash
-pip install fastapi uvicorn
+docker info
 ```
 
-Then generate it with:
+If Docker is working correctly, Docker Engine information will be displayed.
+
+---
+
+## 2. Build the Docker Images
+
+Run:
 
 ```bash
-pip freeze > requirements.txt
+docker compose build
+```
+
+For a completely fresh build without using the Docker cache:
+
+```bash
+docker compose build --no-cache
 ```
 
 ---
 
-# ▶️ Running the Application
+## 3. Start the Application
 
-Start the FastAPI development server using Uvicorn:
+Run:
 
 ```bash
-uvicorn main:app --reload
+docker compose up -d
 ```
 
-The API will be available at:
+The `-d` option runs the containers in detached mode.
+
+Docker Compose starts:
 
 ```text
-http://127.0.0.1:8000
+FastAPI Application
+        +
+PostgreSQL Database
 ```
 
-or:
+---
+
+## 4. Check Container Status
+
+Run:
+
+```bash
+docker compose ps
+```
+
+You should see both services running.
+
+Example:
+
+```text
+NAME            SERVICE   STATUS
+task-api-app    app       Up
+task-api-db     db        Up (healthy)
+```
+
+The exact container names may vary depending on the Docker Compose project name.
+
+---
+
+# 📋 Viewing Logs
+
+## Application Logs
+
+```bash
+docker compose logs app
+```
+
+Follow application logs in real time:
+
+```bash
+docker compose logs -f app
+```
+
+## PostgreSQL Logs
+
+```bash
+docker compose logs db
+```
+
+Follow PostgreSQL logs:
+
+```bash
+docker compose logs -f db
+```
+
+---
+
+# 🌐 Access the API
+
+Once the containers are running, the API is available at:
 
 ```text
 http://localhost:8000
 ```
 
-The `--reload` option automatically restarts the server whenever you make changes to the source code.
+You can verify the root endpoint:
+
+```text
+http://localhost:8000/
+```
 
 ---
 
 # 📖 API Documentation
 
-FastAPI automatically generates interactive API documentation.
+FastAPI automatically generates OpenAPI documentation.
 
 ## Swagger UI
 
@@ -174,16 +378,17 @@ http://localhost:8000/docs
 
 Swagger UI allows you to:
 
-* View all available endpoints
-* Inspect request and response schemas
-* Send API requests directly from the browser
-* Test CRUD operations
-* View validation requirements
-* Inspect HTTP responses and status codes
+- View all API endpoints
+- Inspect request schemas
+- Inspect response schemas
+- Execute API requests
+- Test CRUD operations
+- View HTTP status codes
+- Test validation behavior
 
 ## ReDoc
 
-FastAPI also provides an alternative documentation interface:
+Alternative API documentation:
 
 ```text
 http://localhost:8000/redoc
@@ -193,20 +398,34 @@ http://localhost:8000/redoc
 
 # 🔗 API Endpoints
 
-| Method   | Endpoint      | Description             |
-| -------- | ------------- | ----------------------- |
-| `GET`    | `/`           | Returns API information |
-| `GET`    | `/tasks`      | Get all tasks           |
-| `GET`    | `/tasks/{id}` | Get a task by ID        |
-| `POST`   | `/tasks`      | Create a new task       |
-| `PUT`    | `/tasks/{id}` | Update an existing task |
-| `DELETE` | `/tasks/{id}` | Delete a task           |
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/` | Check API status |
+| `GET` | `/tasks` | Get all tasks |
+| `GET` | `/tasks/{task_id}` | Get a task by ID |
+| `POST` | `/tasks` | Create a task |
+| `PUT` | `/tasks/{task_id}` | Update a task |
+| `DELETE` | `/tasks/{task_id}` | Delete a task |
+
+---
+
+# 🔄 CRUD Operations
+
+The API follows the standard CRUD pattern:
+
+```text
+CREATE  → POST   /tasks
+READ    → GET    /tasks
+READ    → GET    /tasks/{task_id}
+UPDATE  → PUT    /tasks/{task_id}
+DELETE  → DELETE /tasks/{task_id}
+```
 
 ---
 
 # 📝 API Usage
 
-## 1. Get API Information
+## 1. Check API Status
 
 ### Request
 
@@ -224,12 +443,18 @@ GET /
 
 ---
 
-## 2. Get All Tasks
+# 📋 2. Get All Tasks
 
 ### Request
 
 ```http
 GET /tasks
+```
+
+### cURL
+
+```bash
+curl http://localhost:8000/tasks
 ```
 
 ### Example Response
@@ -239,26 +464,32 @@ GET /tasks
   {
     "id": 1,
     "title": "Learn FastAPI",
-    "done": 0
+    "done": false
   },
   {
     "id": 2,
-    "title": "Build REST API",
-    "done": 0
+    "title": "Connect PostgreSQL Database",
+    "done": false
   },
   {
     "id": 3,
-    "title": "Learn SQLite",
-    "done": 1
+    "title": "Push project to GitHub",
+    "done": false
   }
 ]
 ```
 
 ---
 
-## 3. Get a Task by ID
+# 🔍 3. Get a Single Task
 
 ### Request
+
+```http
+GET /tasks/{task_id}
+```
+
+Example:
 
 ```http
 GET /tasks/1
@@ -270,11 +501,13 @@ GET /tasks/1
 {
   "id": 1,
   "title": "Learn FastAPI",
-  "done": 0
+  "done": false
 }
 ```
 
-If the requested task does not exist, the API returns:
+If the task does not exist, the API returns a `404 Not Found` response.
+
+Example:
 
 ```json
 {
@@ -282,15 +515,9 @@ If the requested task does not exist, the API returns:
 }
 ```
 
-with HTTP status:
-
-```text
-404 Not Found
-```
-
 ---
 
-# ➕ Create a Task
+# ➕ 4. Create a Task
 
 ### Request
 
@@ -302,7 +529,7 @@ POST /tasks
 
 ```json
 {
-  "title": "Learn SQLite"
+  "title": "Learn Docker"
 }
 ```
 
@@ -310,16 +537,13 @@ POST /tasks
 
 ```json
 {
-  "message": "Task created successfully",
-  "task": {
-    "id": 4,
-    "title": "Learn SQLite",
-    "done": 0
-  }
+  "id": 4,
+  "title": "Learn Docker",
+  "done": false
 }
 ```
 
-### Status Code
+### Expected Status
 
 ```text
 201 Created
@@ -327,20 +551,26 @@ POST /tasks
 
 ---
 
-# ✏️ Update a Task
+# ✏️ 5. Update a Task
 
 ### Request
 
 ```http
-PUT /tasks/4
+PUT /tasks/{task_id}
+```
+
+Example:
+
+```http
+PUT /tasks/1
 ```
 
 ### Request Body
 
 ```json
 {
-  "title": "Master SQLite",
-  "done": 1
+  "title": "Learn FastAPI and PostgreSQL",
+  "done": true
 }
 ```
 
@@ -348,16 +578,13 @@ PUT /tasks/4
 
 ```json
 {
-  "message": "Task updated successfully",
-  "task": {
-    "id": 4,
-    "title": "Master SQLite",
-    "done": 1
-  }
+  "id": 1,
+  "title": "Learn FastAPI and PostgreSQL",
+  "done": true
 }
 ```
 
-### Status Code
+### Expected Status
 
 ```text
 200 OK
@@ -365,23 +592,21 @@ PUT /tasks/4
 
 ---
 
-# 🗑️ Delete a Task
+# 🗑️ 6. Delete a Task
 
 ### Request
 
 ```http
-DELETE /tasks/4
+DELETE /tasks/{task_id}
 ```
 
-### Example Response
+Example:
 
-```json
-{
-  "message": "Task deleted successfully"
-}
+```http
+DELETE /tasks/1
 ```
 
-### Status Code
+### Expected Status
 
 ```text
 200 OK
@@ -397,281 +622,320 @@ If the task does not exist:
 
 # 📌 HTTP Status Codes
 
-| Status Code                 | Meaning                        |
-| --------------------------- | ------------------------------ |
-| `200 OK`                    | Request completed successfully |
-| `201 Created`               | New task successfully created  |
-| `400 Bad Request`           | Invalid request data           |
-| `404 Not Found`             | Requested task does not exist  |
-| `422 Unprocessable Entity`  | FastAPI validation error       |
-| `500 Internal Server Error` | Unexpected server-side error   |
+| Status Code | Meaning |
+|---|---|
+| `200 OK` | Request completed successfully |
+| `201 Created` | Resource successfully created |
+| `400 Bad Request` | Invalid request |
+| `404 Not Found` | Requested task does not exist |
+| `422 Unprocessable Entity` | FastAPI validation error |
+| `500 Internal Server Error` | Unexpected server-side error |
 
-> FastAPI automatically handles many request validation errors and returns `422 Unprocessable Entity` when incoming data does not match the defined Pydantic schema.
-
----
-
-# 🗄️ SQLite Database
-
-This project uses **SQLite** as its persistent database.
-
-SQLite was selected because it is:
-
-* Lightweight
-* Serverless
-* Easy to configure
-* Suitable for small backend applications
-* File-based
-* Easy to develop and test locally
-
-No separate database server is required.
+FastAPI automatically validates incoming request data using Pydantic and returns `422 Unprocessable Entity` when the request does not match the expected schema.
 
 ---
 
-## Database Initialization
+# 🗄️ PostgreSQL Database
 
-When the application starts:
+This project uses **PostgreSQL 16** as its relational database.
 
-1. The SQLite database is created if it does not already exist.
-2. The `tasks` table is created if it does not already exist.
-3. Sample tasks are inserted only when the table is empty.
-4. Existing task data is preserved.
-5. All CRUD operations interact directly with the SQLite database.
+The application automatically initializes the database when it starts.
 
-### Database Location
+The main table is:
 
-```text
-database/tasks.db
+```sql
+CREATE TABLE IF NOT EXISTS tasks (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    done BOOLEAN NOT NULL DEFAULT FALSE
+);
 ```
 
-The database file allows task data to persist even after the FastAPI server is stopped or restarted.
+## Database Schema
 
----
-
-# 🧱 Database Schema
-
-The `tasks` table contains the following fields:
-
-| Column  | Type    | Description                         |
-| ------- | ------- | ----------------------------------- |
-| `id`    | INTEGER | Unique task identifier              |
-| `title` | TEXT    | Task title                          |
-| `done`  | INTEGER | Task completion status (`0` or `1`) |
+| Column | Type | Description |
+|---|---|---|
+| `id` | `SERIAL` | Unique task identifier |
+| `title` | `TEXT` | Task title |
+| `done` | `BOOLEAN` | Task completion status |
 
 Example:
 
 ```text
-id | title              | done
----|--------------------|-----
-1  | Learn FastAPI      | 0
-2  | Build REST API     | 0
-3  | Learn SQLite       | 1
+id | title                         | done
+---|-------------------------------|------
+1  | Learn FastAPI                 | false
+2  | Connect PostgreSQL Database   | false
+3  | Push project to GitHub       | false
 ```
 
 ---
 
-# 🔍 SQL Queries
+# 🌱 Automatic Seed Data
 
-The application uses SQL queries to perform database operations.
+When the application starts, it checks whether the `tasks` table already contains data.
 
-## Retrieve All Tasks
+If the table is empty, initial sample tasks are inserted.
 
-```sql
-SELECT * FROM tasks;
+Example seed data:
+
+```text
+Learn FastAPI
+Connect PostgreSQL Database
+Push project to GitHub
 ```
 
-## Retrieve a Task by ID
+This provides useful data immediately after the first application startup.
 
-```sql
-SELECT * FROM tasks
-WHERE id = ?;
+Existing database records are preserved.
+
+---
+
+# 🏗️ Repository Pattern
+
+Database operations are separated from the API routes using a **Repository Pattern**.
+
+The repository is located at:
+
+```text
+app/repositories/postgres_repository.py
 ```
 
-## Create a Task
+The repository handles database operations such as:
 
-```sql
-INSERT INTO tasks (title, done)
-VALUES (?, 0);
+```text
+initialize_database()
+get_all_tasks()
+get_task()
+create_task()
+update_task()
+delete_task()
 ```
 
-## Update a Task
+This separation provides a cleaner architecture:
 
-```sql
-UPDATE tasks
-SET title = ?, done = ?
-WHERE id = ?;
+```text
+API Routes
+    │
+    ▼
+Repository Layer
+    │
+    ▼
+PostgreSQL
 ```
 
-## Delete a Task
+It also makes the database layer easier to maintain and replace in the future.
 
-```sql
-DELETE FROM tasks
-WHERE id = ?;
+---
+
+# 🚀 Application Startup Flow
+
+When the application starts, the following process occurs:
+
+```text
+FastAPI starts
+      │
+      ▼
+Application startup
+      │
+      ▼
+PostgresRepository.initialize_database()
+      │
+      ▼
+Connect to PostgreSQL
+      │
+      ▼
+Create tasks table if necessary
+      │
+      ▼
+Check existing tasks
+      │
+      ▼
+Seed initial data if database is empty
+      │
+      ▼
+API becomes available
 ```
 
-## Show Completed Tasks
+---
 
-```sql
-SELECT * FROM tasks
-WHERE done = 1;
+# 💾 PostgreSQL Persistence
+
+PostgreSQL data is stored using a **Docker named volume**.
+
+The Docker Compose configuration uses a volume similar to:
+
+```yaml
+volumes:
+  postgres_data:
 ```
 
-## Count All Tasks
+This allows PostgreSQL data to survive container recreation.
 
-```sql
-SELECT COUNT(*) FROM tasks;
+For example:
+
+```bash
+docker compose down
 ```
 
-## Mark Every Task as Completed
+followed by:
 
-```sql
-UPDATE tasks
-SET done = 1;
+```bash
+docker compose up -d
 ```
 
-## Delete All Completed Tasks
-
-```sql
-DELETE FROM tasks
-WHERE done = 1;
-```
+will recreate the containers while preserving the database data stored in the named volume.
 
 ---
 
 # 🧪 Testing the API
 
-The API can be tested using several tools.
+The API can be tested using:
 
-### Swagger UI
+- **Swagger UI**
+- **Postman**
+- **cURL**
+- **Browser** for GET requests
+- **Insomnia**
+- **Thunder Client**
+
+## Swagger
+
+The easiest way to test the API is:
 
 ```text
 http://localhost:8000/docs
 ```
 
-### cURL
+Swagger provides an interactive interface for testing all CRUD operations.
 
-Example:
+---
+
+# 🛑 Stopping the Application
+
+To stop the application:
 
 ```bash
-curl -X POST "http://localhost:8000/tasks" \
--H "Content-Type: application/json" \
--d "{\"title\":\"Learn FastAPI\"}"
+docker compose down
 ```
 
-### Browser
+This stops and removes the application containers and Docker network.
 
-GET endpoints can also be tested directly from a browser:
-
-```text
-http://localhost:8000/tasks
-```
-
-### API Clients
-
-The API can also be tested using tools such as:
-
-* Postman
-* Insomnia
-* Thunder Client
-* Swagger UI
+The PostgreSQL named volume is preserved.
 
 ---
 
-# 🔄 CRUD Workflow
+# 🗑️ Remove Containers and Database Data
 
-The application follows the standard CRUD architecture:
+If you want to completely remove the containers **and PostgreSQL database volume**, run:
 
-```text
-             ┌──────────────┐
-             │    Client    │
-             └──────┬───────┘
-                    │
-                    ▼
-             ┌──────────────┐
-             │   FastAPI    │
-             │ REST Routes  │
-             └──────┬───────┘
-                    │
-                    ▼
-             ┌──────────────┐
-             │   Database   │
-             │    Layer     │
-             └──────┬───────┘
-                    │
-                    ▼
-             ┌──────────────┐
-             │    SQLite    │
-             │  tasks.db    │
-             └──────────────┘
+```bash
+docker compose down -v
 ```
 
-### CRUD Operations
+> ⚠️ **Warning:** `-v` removes the PostgreSQL Docker volume. All stored database data will be deleted.
 
-```text
-CREATE  → POST   /tasks
-READ    → GET    /tasks
-READ    → GET    /tasks/{id}
-UPDATE  → PUT    /tasks/{id}
-DELETE  → DELETE /tasks/{id}
+After that, starting the application again will create a fresh PostgreSQL database.
+
+---
+
+# 🔧 Useful Docker Commands
+
+### Check running services
+
+```bash
+docker compose ps
+```
+
+### Check all containers
+
+```bash
+docker compose ps -a
+```
+
+### View application logs
+
+```bash
+docker compose logs app
+```
+
+### View PostgreSQL logs
+
+```bash
+docker compose logs db
+```
+
+### Follow application logs
+
+```bash
+docker compose logs -f app
+```
+
+### Follow PostgreSQL logs
+
+```bash
+docker compose logs -f db
+```
+
+### Restart services
+
+```bash
+docker compose restart
+```
+
+### Stop services
+
+```bash
+docker compose down
+```
+
+### Rebuild application
+
+```bash
+docker compose build --no-cache
+```
+
+### Start everything
+
+```bash
+docker compose up -d
 ```
 
 ---
 
-# 🛡️ Validation
+# 💻 Local Development Without Docker
 
-Request data is validated using **Pydantic**, which is integrated into FastAPI.
+Docker Compose is the recommended setup, but the FastAPI application can also be run directly from a local Python virtual environment.
 
-For example, creating a task requires a valid task title:
+## 1. Create a Virtual Environment
 
-```json
-{
-  "title": "Learn FastAPI"
-}
+### Windows
+
+```bash
+python -m venv venv
 ```
 
-Invalid request data is automatically rejected by FastAPI with an appropriate validation response.
+Activate:
+
+```bash
+venv\Scripts\activate
+```
+
+### macOS / Linux
+
+```bash
+python3 -m venv venv
+```
+
+Activate:
+
+```bash
+source venv/bin/activate
+```
 
 ---
 
-# 📸 Screenshots
-
-## Swagger UI
-
-Add a screenshot of the interactive API documentation to:
-
-```text
-assets/swagger.png
-```
-
-Then include it here:
-
-![Swagger UI](assets/swagger.png)
-
----
-
-## SQLite Database
-
-Open `tasks.db` using **DB Browser for SQLite**, take a screenshot of the database and save it as:
-
-```text
-assets/sqlite-db.png
-```
-
-Then include it here:
-
-![SQLite Database](assets/sqlite-db.png)
-
----
-
-# 📦 Dependencies
-
-The main dependencies used in this project are:
-
-```text
-fastapi
-uvicorn
-```
-
-Install all dependencies with:
+## 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -679,65 +943,188 @@ pip install -r requirements.txt
 
 ---
 
-# 🚀 Future Improvements
+## 3. Configure PostgreSQL
 
-Possible improvements for future versions include:
+Make sure PostgreSQL is running and configure the appropriate `DATABASE_URL`.
 
-* 🔐 JWT authentication
-* 👤 User accounts
-* 🗃️ PostgreSQL/MySQL support
-* 🔎 Task search and filtering
-* 📄 Pagination
-* 🏷️ Task categories and tags
-* 📅 Due dates
-* ⚡ Async database operations
-* 🧪 Automated unit and integration tests
-* 🐳 Docker support
-* ☁️ Cloud deployment
-* 🔄 CI/CD pipeline
-* 📊 API monitoring and logging
+> When running the application **outside Docker**, the database hostname normally needs to point to your local PostgreSQL instance rather than the Docker Compose service name `db`.
 
 ---
 
-# 🎯 Learning Outcomes
+## 4. Start FastAPI
+
+```bash
+uvicorn app.main:app --reload
+```
+
+The API will be available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# 🔀 Git Workflow
+
+A feature branch can be used for development.
+
+Example:
+
+```bash
+git checkout -b feature/postgresql-docker
+```
+
+Check the repository status:
+
+```bash
+git status
+```
+
+Stage changes:
+
+```bash
+git add .
+```
+
+Commit:
+
+```bash
+git commit -m "feat: connect FastAPI to PostgreSQL and Dockerize app"
+```
+
+Push the branch:
+
+```bash
+git push origin feature/postgresql-docker
+```
+
+After testing, the feature branch can be merged into the main development branch.
+
+---
+
+# 🔒 Git Security Checklist
+
+Before pushing to GitHub, verify that sensitive files are not staged:
+
+```bash
+git status
+```
+
+Make sure `.env` is ignored.
+
+If `.env` accidentally appears in staged changes:
+
+```bash
+git restore --staged .env
+```
+
+Never commit:
+
+```text
+.env
+```
+
+or real database credentials.
+
+---
+
+# 📊 Current Project Status
+
+The current version of the project includes:
+
+- ✅ FastAPI REST API
+- ✅ Complete CRUD functionality
+- ✅ PostgreSQL integration
+- ✅ Psycopg 3 database driver
+- ✅ Automatic database initialization
+- ✅ Automatic seed data
+- ✅ Repository pattern
+- ✅ Dockerfile
+- ✅ Docker Compose
+- ✅ PostgreSQL Docker volume
+- ✅ PostgreSQL health check
+- ✅ Environment variables
+- ✅ Swagger/OpenAPI documentation
+- ✅ ReDoc documentation
+- ✅ API validation with Pydantic
+- ✅ Git/GitHub workflow
+
+---
+
+# 🚀 Future Improvements
+
+Potential improvements for future versions include:
+
+- 🧪 Automated testing with Pytest
+- 🗃️ Database migrations with Alembic
+- 🔐 Authentication and authorization
+- 👤 User accounts
+- 🔎 Task searching and filtering
+- 📄 Pagination
+- 📝 Structured application logging
+- 🔄 API versioning
+- ❤️ API health checks
+- ⚙️ CI/CD with GitHub Actions
+- ☁️ Production deployment
+- 📊 Monitoring and observability
+
+---
+
+# 📚 Learning Outcomes
 
 Through this project, the following backend development concepts were practiced:
 
-* REST API development
-* FastAPI application structure
-* HTTP methods and status codes
-* CRUD operations
-* SQLite database integration
-* SQL queries
-* Pydantic data validation
-* API documentation with Swagger/OpenAPI
-* Uvicorn ASGI server
-* Persistent data storage
-* Backend project organization
-* API testing
+1. Building REST APIs with FastAPI
+2. Implementing CRUD operations
+3. Working with PostgreSQL
+4. Using Psycopg 3
+5. Designing a repository layer
+6. Separating API routes from database logic
+7. Managing environment variables
+8. Containerizing Python applications
+9. Creating Docker images
+10. Running multiple services with Docker Compose
+11. Persisting PostgreSQL data with Docker volumes
+12. Using database health checks
+13. Debugging Docker and database connectivity
+14. Validating API requests with Pydantic
+15. Testing APIs through Swagger, cURL, and Postman
+16. Managing source code with Git and GitHub
 
 ---
 
 # 👨‍💻 Author
 
-**Asheer Hadayat**
+**Asheer Hidayat**
 
-BS Computer Science
+Computer Science Student  
 COMSATS University Islamabad
 
-* GitHub: [Asheer-abbasi01](https://github.com/Asheer-abbasi01)
-* LinkedIn: [Asheer Hadayat](https://www.linkedin.com/in/hashir-abbasi-01a27a302)
+### GitHub
+
+https://github.com/Asheer-abbasi01
+
+### Portfolio
+
+https://asheer-portfolio.vercel.app/
 
 ---
 
 # 📄 License
 
-This project was created for **educational purposes** as part of the **FlyRank Backend AI Engineering Internship – Week 3 (BE-02)**.
+This project was created for **educational and internship purposes** as part of the **FlyRank AI Backend AI Engineering Internship — Week 3 (BE-02)**.
 
-You are free to use and modify the project for learning and educational purposes.
+You are free to use and modify this project for learning and educational purposes.
 
 ---
 
-## ⭐ If you found this project useful
+## ⭐ Support
 
-Consider giving the repository a ⭐ on GitHub!
+If you found this project useful, consider giving the repository a ⭐ on GitHub.
