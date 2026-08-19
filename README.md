@@ -1,4 +1,4 @@
-# 🚀 Task API — FastAPI + PostgreSQL + Docker
+#  Task API — FastAPI + PostgreSQL + Docker
 
 A production-oriented **RESTful CRUD API** built with **Python, FastAPI, PostgreSQL, and Docker**.
 
@@ -8,32 +8,32 @@ The project was developed as part of the **FlyRank AI Backend AI Engineering Int
 
 ---
 
-## ✨ Features
+##  Features
 
-- ✅ RESTful CRUD API for tasks
-- ✅ Create, read, update, and delete tasks
-- ✅ FastAPI backend
-- ✅ PostgreSQL relational database
-- ✅ Psycopg 3 PostgreSQL driver
-- ✅ Pydantic request validation
-- ✅ Repository pattern for database operations
-- ✅ Automatic database initialization
-- ✅ Automatic `tasks` table creation
-- ✅ Automatic seed data on first startup
-- ✅ Environment-based database configuration
-- ✅ Dockerized FastAPI application
-- ✅ Docker Compose for multi-container orchestration
-- ✅ PostgreSQL persistent named volume
-- ✅ PostgreSQL health check
-- ✅ Interactive Swagger UI documentation
-- ✅ ReDoc API documentation
-- ✅ Proper RESTful HTTP status codes
-- ✅ Clean and modular project structure
-- ✅ Data persistence across container recreation
+-  RESTful CRUD API for tasks
+-  Create, read, update, and delete tasks
+-  FastAPI backend
+-  PostgreSQL relational database
+-  Psycopg 3 PostgreSQL driver
+-  Pydantic request validation
+-  Repository pattern for database operations
+-  Automatic database initialization
+-  Automatic `tasks` table creation
+-  Automatic seed data on first startup
+-  Environment-based database configuration
+-  Dockerized FastAPI application
+-  Docker Compose for multi-container orchestration
+-  PostgreSQL persistent named volume
+-  PostgreSQL health check
+-  Interactive Swagger UI documentation
+-  ReDoc API documentation
+-  Proper RESTful HTTP status codes
+-  Clean and modular project structure
+-  Data persistence across container recreation
 
 ---
 
-# 🛠️ Tech Stack
+#  Tech Stack
 
 | Technology | Purpose |
 |---|---|
@@ -50,7 +50,7 @@ The project was developed as part of the **FlyRank AI Backend AI Engineering Int
 
 ---
 
-# 📂 Project Structure
+#  Project Structure
 
 ```text
 flyrank-be-02-python-crud/
@@ -97,7 +97,7 @@ flyrank-be-02-python-crud/
 
 ---
 
-# 🏗️ Application Architecture
+#  Application Architecture
 
 The application consists of two main Docker services:
 
@@ -169,7 +169,7 @@ python --version
 
 ---
 
-# 📥 Installation
+#  Installation
 
 ## 1. Clone the Repository
 
@@ -187,7 +187,7 @@ cd task-api
 
 ---
 
-# 🔐 Environment Configuration
+#  Environment Configuration
 
 Create a `.env` file in the project root:
 
@@ -224,7 +224,7 @@ For production systems, use secure secrets management instead of storing credent
 
 ---
 
-# 📦 Python Dependencies
+#  Python Dependencies
 
 The project uses the following main dependencies:
 
@@ -244,7 +244,7 @@ pip install -r requirements.txt
 
 ---
 
-# 🐳 Running the Application with Docker
+#  Running the Application with Docker
 
 Docker Compose is the recommended way to run the complete application because it starts both FastAPI and PostgreSQL.
 
@@ -971,7 +971,7 @@ http://127.0.0.1:8000/docs
 
 ---
 
-# 🔀 Git Workflow
+#  Git Workflow
 
 A feature branch can be used for development.
 
@@ -1009,7 +1009,7 @@ After testing, the feature branch can be merged into the main development branch
 
 ---
 
-# 🔒 Git Security Checklist
+#  Git Security Checklist
 
 Before pushing to GitHub, verify that sensitive files are not staged:
 
@@ -1035,49 +1035,49 @@ or real database credentials.
 
 ---
 
-# 📊 Current Project Status
+#  Current Project Status
 
 The current version of the project includes:
 
-- ✅ FastAPI REST API
-- ✅ Complete CRUD functionality
-- ✅ PostgreSQL integration
-- ✅ Psycopg 3 database driver
-- ✅ Automatic database initialization
-- ✅ Automatic seed data
-- ✅ Repository pattern
-- ✅ Dockerfile
-- ✅ Docker Compose
-- ✅ PostgreSQL Docker volume
-- ✅ PostgreSQL health check
-- ✅ Environment variables
-- ✅ Swagger/OpenAPI documentation
-- ✅ ReDoc documentation
-- ✅ API validation with Pydantic
-- ✅ Git/GitHub workflow
+-  FastAPI REST API
+-  Complete CRUD functionality
+-  PostgreSQL integration
+-  Psycopg 3 database driver
+-  Automatic database initialization
+-  Automatic seed data
+-  Repository pattern
+-  Dockerfile
+-  Docker Compose
+-  PostgreSQL Docker volume
+-  PostgreSQL health check
+-  Environment variables
+-  Swagger/OpenAPI documentation
+-  ReDoc documentation
+-  API validation with Pydantic
+-  Git/GitHub workflow
 
 ---
 
-# 🚀 Future Improvements
+#  Future Improvements
 
 Potential improvements for future versions include:
 
-- 🧪 Automated testing with Pytest
-- 🗃️ Database migrations with Alembic
-- 🔐 Authentication and authorization
-- 👤 User accounts
-- 🔎 Task searching and filtering
-- 📄 Pagination
-- 📝 Structured application logging
-- 🔄 API versioning
-- ❤️ API health checks
-- ⚙️ CI/CD with GitHub Actions
-- ☁️ Production deployment
-- 📊 Monitoring and observability
+-  Automated testing with Pytest
+-  Database migrations with Alembic
+-  Authentication and authorization
+-  User accounts
+-  Task searching and filtering
+-  Pagination
+-  Structured application logging
+-  API versioning
+-  API health checks
+-  CI/CD with GitHub Actions
+-  Production deployment
+-  Monitoring and observability
 
 ---
 
-# 📚 Learning Outcomes
+#  Learning Outcomes
 
 Through this project, the following backend development concepts were practiced:
 
